@@ -2,6 +2,7 @@ from datasets import Dataset, DatasetDict, load_from_disk
 import os
 from PIL import Image
 import numpy as np
+from tqdm import tqdm
 
 # Load your Arrow dataset
 dataset_path = '../data/imagenet-1k/default/1.0.0/07900defe1ccf3404ea7e5e876a64ca41192f6c07406044771544ef1505831e8/'
@@ -19,7 +20,7 @@ os.makedirs(val_dir, exist_ok=True)
 def save_images_from_arrow(arrow_files, split_dir):
     for arrow_file in arrow_files:
         dataset = Dataset.from_file(arrow_file)
-        for i, example in enumerate(dataset):
+        for i, example in tqdm(enumerate(dataset)):
             image = Image.fromarray(np.array(example['image']))
             label = example['label']
             label_dir = os.path.join(split_dir, str(label))
